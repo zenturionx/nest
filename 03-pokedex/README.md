@@ -58,6 +58,17 @@ $ yarn run test:e2e
 $ yarn run test:cov
 ```
 
+## Ejecutar en desarrollo
+
+1. levantar la base de datos
+```
+docker-compose up -d
+```
+
+## Stack usado
+* NestJS
+* MongoDB
+
 ## Support
 
 Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
