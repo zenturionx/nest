@@ -65,9 +65,28 @@ $ yarn run test:cov
 docker-compose up -d
 ```
 
+2. Clonar el archivo __.env.template__ y renombrarlo a __.env__
+3. Llenar las variables de entorno definidas en el archivo __.env__
+4. Ejecutar la aplicacion en dev:
+```
+yarn run start:dev
+```
+5. Reconstruir la base de datos con la semilla
+```
+http://localhost:3000/api/v2/seed
+```
+
 ## Stack usado
 * NestJS
 * MongoDB
+
+## Production build
+1. crear archivo __.env.production__ con las variables de entorno
+2. llenar las variables de entorno
+3. crear la nueva imagen de docker
+```
+docker-compose -f docker-compose.prod.yaml --env-file .env.prod up --build
+```
 
 ## Support
 
