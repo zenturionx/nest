@@ -36,7 +36,7 @@
 ```
 docker-compose up -d
 ```
-6. Levantar el proyecto:
+6. Levantar el proyecto en local con el siguiente comando:
 ```
 yarn start:dev
 ```
