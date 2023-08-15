@@ -29,12 +29,9 @@ export class ProductsController {
     return this.productsService.findAll(paginationDto);
   }
 
-  @Get(':id')
-  async findOne(@Param('id', ParseUUIDPipe) id: string) {
-    const product = await this.productsService.findOne(id);
-    if(!product)
-      throw new NotFoundException(`Product #${id} not found`);
-    return product;
+  @Get(':term')
+  async findOne(@Param('term') term: string) {
+    return this.productsService.findOne(term);
   }
 
   @Patch(':id')
