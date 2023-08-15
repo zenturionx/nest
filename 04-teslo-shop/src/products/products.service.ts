@@ -4,6 +4,7 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import {Product} from "./entities/product.entity";
 import {InjectRepository} from "@nestjs/typeorm";
 import {Repository} from "typeorm";
+import {PaginationDto} from "../common/dtos/pagination.dto";
 
 @Injectable()
 export class ProductsService {
@@ -27,8 +28,13 @@ export class ProductsService {
   }
 
   //TODO: paginar los resultados
-  findAll() {
-    return this.productRepository.find({});
+  findAll(paginationDto: PaginationDto) {
+    const {limit = 10, offset = 0} = paginationDto;
+    return this.productRepository.find({
+        take: limit,
+        skip: offset,
+      //TODO: relaciones
+    });
   }
 
   findOne(id: string) {
