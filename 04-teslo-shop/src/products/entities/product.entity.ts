@@ -16,31 +16,31 @@ export class Product {
     })
     price: number;
 
-    @Column( {
+    @Column({
         type: 'text',
         nullable: true
     })
     description: string;
 
-    @Column( {
+    @Column({
         type: 'text',
         unique: true
     })
     slug: string;
 
-    @Column( {
+    @Column({
         type: 'int',
         default: 0
     })
     stock: number;
 
-    @Column( {
+    @Column({
         type: 'text',
         array: true,
     })
     sizes: string[];
 
-    @Column( {
+    @Column({
         type: 'text',
     })
     gender: string;
@@ -60,6 +60,13 @@ export class Product {
         }
     }
 
-    //@BeforeUpdate()
+    @BeforeUpdate()
+    checkSlugUpdate() {
+        this.slug = this.slug
+            .toLowerCase()
+            .replaceAll(' ', '_')
+            .replaceAll("'", '');
+
+    }
 
 }
