@@ -23,11 +23,11 @@ export class ProductsService {
 
     async create(createProductDto: CreateProductDto) {
         try {
-            const { images = [], ...productDetails } = createProductDto;
+            const {images = [], ...productDetails} = createProductDto;
 
             const product = this.productRepository.create({
                 ...productDetails,
-                images: images.map(image => this.productImageRepository.create({ url: image })),
+                images: images.map(image => this.productImageRepository.create({url: image})),
             });
             await this.productRepository.save(product);
             return {...product, images};
@@ -75,7 +75,7 @@ export class ProductsService {
     }
 
     async findOnePlain(term: string) {
-        const { images = [], ...rest } = await this.findOne(term);
+        const {images = [], ...rest} = await this.findOne(term);
         return {
             ...rest,
             images: images.map(image => image.url)
@@ -86,8 +86,8 @@ export class ProductsService {
         id: string,
         updateProductDto: UpdateProductDto
     ) {
-        const { images, ...toUpdate } = updateProductDto;
-        const product = await this.productRepository.preload({id,...toUpdate});
+        const {images, ...toUpdate} = updateProductDto;
+        const product = await this.productRepository.preload({id, ...toUpdate});
 
         if (!product) {
             throw new NotFoundException(`Product #${id} not found`);
@@ -95,12 +95,27 @@ export class ProductsService {
 
         // create query runner
         const queryRunner = this.dataSource.createQueryRunner();
+        await queryRunner.connect();
+        await queryRunner.startTransaction();
 
 
         try {
-          await this.productRepository.save(product);
-          return product;
+            if (images) {
+                await queryRunner.manager.delete(ProductImage, {product: {id}});
+
+                product.images = images.map(image => this.productImageRepository.create({url: image}));
+            }
+
+            await queryRunner.manager.save(product);
+
+            await queryRunner.commitTransaction();
+            await queryRunner.release();
+
+            return this.findOnePlain(id);
         } catch (error) {
+            await queryRunner.rollbackTransaction();
+            await queryRunner.release();
+
             this.handleDBExceptions(error);
         }
     }
