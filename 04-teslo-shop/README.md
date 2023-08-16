@@ -36,7 +36,11 @@
 ```
 docker-compose up -d
 ```
-6. Levantar el proyecto en local con el siguiente comando:
+6. Ejecutar SEED de la base de datos:
+```
+http://localhost:3000/api/seed
+```
+7. Levantar el proyecto en local con el siguiente comando:
 ```
 yarn start:dev
 ```
