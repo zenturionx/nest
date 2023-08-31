@@ -32,7 +32,7 @@ export class AuthService {
 
             return {
                 ...user,
-                token: this.getJwtToken({email: user.email})
+                token: this.getJwtToken({id: user.id})
             };
         } catch (error) {
             this.handleError(error);
@@ -43,7 +43,7 @@ export class AuthService {
         const {password, email} = loginUserDto;
         const user = await this.userRepository.findOne({
             where: {email},
-            select: {email: true, password: true}
+            select: {email: true, password: true, id: true}
         });
 
         if (!user) {
@@ -54,13 +54,12 @@ export class AuthService {
         }
         return {
             ...user,
-            token: this.getJwtToken({email: user.email})
+            token: this.getJwtToken({id: user.id})
         };
     }
 
     private getJwtToken(payload: JwtPayload) {
-        const token = this.jwtService.sign(payload);
-        return token;
+        return this.jwtService.sign(payload);
     }
 
     private handleError(error: any): never {
